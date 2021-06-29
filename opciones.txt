@@ -27,6 +27,9 @@ https://github.com/putuprema/BinarySearchTree-JS
 https://github.com/duyanton/avl
 https://www.cs.usfca.edu/~galles/visualization/source.html
 
-
 https://github.com/yangez/btree-js
 http://yangez.github.io/btree-js/
+
+
+-- Para Trabajo Final
+https://github.com/ChinYing-Li/CUDA-kdtree
