@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+	<form id="insertTree" onSubmit="return handleInsert()">
+		<input id="insertInput" type="text" placeholder="Number to insert" maxlength="4" size="14" autofocus>
+		<input type="submit" value="Insert">
+	</form>
+  <form id="deleteTree" onSubmit="return handleDelete()">
+    <input id="deleteInput" type="text" placeholder="Number to delete" maxlength="4" size="14">
+    <input type="submit" value="Delete">
+  </form>
+  <svg></svg>
+  <script src="js/jquery-3.6.0.min.js"></script>
+  <script src="js/d3.min.js"></script>
+  <script src="js/tree-creation.js"></script>
+  <script src="js/tree-visualization.js"></script>
+</body>
