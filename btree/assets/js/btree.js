@@ -5,7 +5,7 @@ var BTree = function(order){
   tree.order = order;
   tree.current_leaf_offset = 0;
   tree.unattached_nodes = [[]]; // array for unattached nodes based on leaf_offset
-
+  debugger;
   if (tree.order < 3) {
     alert("Order must be 3 or above.");
     return false;
@@ -46,6 +46,31 @@ BTree.prototype.insert = function(value, silent) {
 
   // 2. Apply target.insert (recursive)
   target.insert(value);
+
+}
+
+// Main insertion function
+BTree.prototype.delete = function(value) {
+  debugger;
+  if (this.search(value, true)) {    
+    if (!silent) alert("The value "+value+" already exists!");
+    return false;
+  }
+  
+
+  // this.current_leaf_offset = 0;
+  // this.unattached_nodes = [[]];
+
+  // // 1. Find which leaf the inserted value should go
+  // var target = this.search(value);
+  // if (!target) {
+  //   // create new root node
+  //   this.root = this.createNode();
+  //   target = this.root;
+  // }
+
+  // // 2. Apply target.insert (recursive)
+  // target.insert(value);
 
 }
 

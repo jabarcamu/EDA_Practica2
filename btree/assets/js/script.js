@@ -106,6 +106,40 @@ $(function() {
 
   });
 
+  $("#delete-form").submit(function(event) {
+    event.preventDefault();
+    var value = parseInt( $("#input-delete").val() );
+    
+    bTree.delete(value); // silently insert
+
+    $("#input-delete").val("");
+
+    // treeData = bTree.toJSON();
+    // console.log(treeData);
+    // update(treeData);
+
+    // Make the current add node highlighted in red
+    // $("g text").each(function(index) {
+    //   var bTreeNode = bTree.search(value);
+    //   var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+    //     return d.name === bTreeNode.keys.toString();
+    //   });
+
+    //   // reset all links and nodes
+    //   d3.selectAll('g.node').select('circle').style({stroke : '#ccc', fill: '#ffffff'});
+    //   d3.selectAll('.link').style('stroke','#ccc');
+
+    //   // color links and all intermediate nodes
+    //   //colorPath(bTreeNode);
+
+    //   // color bottom node
+    //   d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
+    // });
+
+    //ga('send', 'event', 'tree', 'inserted value');
+
+  });
+
   // color paths down to newly added node
   // function colorPath(node) {
   //   // color the node itself
