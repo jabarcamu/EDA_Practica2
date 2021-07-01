@@ -52,9 +52,24 @@ BTree.prototype.insert = function(value, silent) {
 // Main insertion function
 BTree.prototype.delete = function(value) {
   debugger;
-  if (this.search(value, true)) {    
-    if (!silent) alert("The value "+value+" already exists!");
+  if (this.search(value, true)) {
+    var target = this.search(value);
+    
+    if (target.isLeaf()) {
+      target.deleteKey(value);
+    }
+    else {
+
+    }
+
+    
+
+    //console.log(this.root);
     return false;
+  }
+
+  else {
+    alert("no se puede eliminar porque no existe el valor")
   }
   
 
@@ -73,6 +88,13 @@ BTree.prototype.delete = function(value) {
   // target.insert(value);
 
 }
+
+// BTree.prototype.deleteKey = function(node,value) {
+//   var valDel = node.keys.indexOf(value);
+//   node.keys.splice(valDel,1);
+
+//   console.log(node);
+// }
 
 BTree.prototype.addUnattached = function(node, level) {
   this.unattached_nodes[level] = this.unattached_nodes[level] || [];

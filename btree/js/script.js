@@ -114,9 +114,9 @@ $(function() {
 
     $("#input-delete").val("");
 
-    // treeData = bTree.toJSON();
-    // console.log(treeData);
-    // update(treeData);
+    treeData = bTree.toJSON();
+    console.log(treeData);
+    update(treeData);
 
     // Make the current add node highlighted in red
     // $("g text").each(function(index) {

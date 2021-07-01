@@ -52,6 +52,47 @@ BTreeNode.prototype.insert = function(value){
   }
 }
 
+BTreeNode.prototype.deleteKey = function(value) {
+  debugger;
+  var valDel = this.keys.indexOf(value);
+  this.keys.splice(valDel,1);
+  
+  if(this.keys.length < Math.ceil((this.tree.order) / 2) - 1) {
+    
+    console.log(this, "menor al order");
+  }
+  else {
+    console.log(this, "lo retira porque no causa problema")
+  }
+  
+
+  
+}
+
+BTreeNode.prototype.handleUnderflow = function() {
+  tree = this.tree;
+
+  // encontrar el nodo anterior 
+  median = this.splitMedian();
+
+  // if no parent, create an empty one and set to root
+  if(this.isRoot()) {
+    tree.root = tree.createNode();
+    this.setParent(tree.root);
+  }
+
+  // if node is internal, unattach children and add to unattached_nodes
+  if (this.isInternal()) this.unattachAllChildren();
+
+  // remove self from parent
+  target = this.parent;
+  this.unsetParent();
+
+  // Push median up to target, increment offset
+  tree.current_leaf_offset += 1;
+  target.insert(median);
+}
+
 BTreeNode.prototype.handleOverflow = function() {
   tree = this.tree;
 
