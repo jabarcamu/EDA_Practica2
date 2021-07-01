@@ -15,7 +15,6 @@ svg.attr('width', '1280')
 
 var oldPos = {};
 var updateTree = function () {
-	console.log(data);
 	var root = d3.hierarchy(data);
 	
 	var newTreeSize = [root.descendants().length * 40, ((root.height + 1) * 2 - 1) * 30];
@@ -155,4 +154,21 @@ var handleDelete = function(event) {
 		});
 	}
 	return false;
+};
+var handleFindValue = function(event) {
+	var num = document.getElementById('findValueInput').value;
+	document.getElementById('findValueInput').value = '';
+	findValue(parseInt(num));	
+	
+	return false;
+};
+
+
+var handleFindMaximo = function(event) {
+	console.log('Evento Click Maximo', event);
+	findMax();
+};
+var handleFindMinimo = function(event) {
+	console.log('Evento Click Minimo', event);
+	findMin();
 };
