@@ -91,19 +91,19 @@ $(function() {
 		var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
 			return d.data.name === nodeMax.keys.toString();
 		});
-		
+
 		// resetear estilos cuando cambie de accion
 		d3.selectAll('g.node').select('circle').style('stroke','steelblue').style('fill','#fff');
 		d3.selectAll('.link').style('stroke','#ccc');
 
-		
+
 		//resaltando el maximo nodo borde negro y relleno rojo
 		d3NodeTouched.select('circle').attr("text-content","14px").style('stroke','#000').style('fill','#ff0000').style('fill-opacity','.50');
-		
+
 
 		// resaltar ruta cuando se busco el maximo valor
 		colorPath(nodeMax);
-		
+
 		//sacamos el valor por input
 		//TODo: encontrar de resaltar el name separado por ultimo o primer valor
 		//diferentes estilos
@@ -134,7 +134,7 @@ $(function() {
 		//TODo: encontrar de resaltar el name separado por ultimo o primer valor
 		//diferentes estilos
 		$("#max-min-value").val(String(nodeMin.keys[parseInt(0)]));
-	colorPath(nodeMin);
+		colorPath(nodeMin);
 
 		ga('send', 'event', 'tree', 'minimum value');
 	});
@@ -197,6 +197,58 @@ $(function() {
 
 	});
 
+	$(".buscar-btree").click(function(event) {
+		event.preventDefault();
+		var value = parseInt( $("#input-add").val());	
+		var itemFinded = bTree.search(value,true);
+		if(itemFinded != false){
+
+			//Buscar el nodo que contenga la clave de manera grafica
+			var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+				return d.data.name === itemFinded.keys.toString();
+			});
+
+			// resetear los estilos cuando se cambio de accion
+			d3.selectAll('g.node').select('circle').style('stroke','steelblue').style('fill','#fff');
+			d3.selectAll('.link').style('stroke','#ccc');
+			$("#input-add").val("");//limpiar input
+			
+			//transformando texto
+			var textNode = itemFinded.keys.toString();
+			var idxItemSearched = itemFinded.keys.indexOf(value);
+			var numCharsKey = String(itemFinded.keys[idxItemSearched]).length;
+			var idxInicioCharItem = textNode.search(itemFinded.keys[idxItemSearched]);
+			//el texto puede estar al medio y al final o al inicio
+			//pero siempre captura tex
+			var textAnt = textNode.slice(0,idxInicioCharItem-1);
+			var tex = textNode.slice(idxInicioCharItem,idxInicioCharItem + numCharsKey);
+			var textFin = textNode.slice(idxInicioCharItem + numCharsKey);
+
+			var textBuscado = textAnt + "[" + tex+"]"+textFin;
+
+			itemFinded.keys[idxItemSearched] = textBuscado;
+
+
+			//actualizacion usando Json sobre D3
+			treeData = bTree.toJSON();
+			console.log(treeData);
+			update(treeData);
+
+
+			//resaltando el minimo nodo borde negro y relleno rojo
+			d3NodeTouched.select('circle').style('stroke','#000').style('fill','#ff0000').style('fill-opacity','.50');
+
+			colorPath(itemFinded);
+
+			
+
+			ga('send', 'event', 'tree', 'search value');
+		}else{
+			alert("el elemento buscado no se encuentra en el arbol");
+		}
+	});
+
+	//Buscar un nodo y resaltarlo
 	$(".borrar-btree").click(function(event) {
 		//llamada de eliminacion de key del B-Tree
 		event.preventDefault();
@@ -231,6 +283,7 @@ $(function() {
 		//ga('send', 'event', 'tree', 'inserted value');
 
 	});
+
 
 	// color paths down to newly added node
 	// function colorPath(node) {
