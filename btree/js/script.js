@@ -51,11 +51,11 @@ $(function() {
 					update(treeData);
 				}
 			});
-			$("#delete-form").fadeIn(200, function(){
-				if(!btree.isEmpty()){
+			$("#max-min-form").fadeIn(200, function() {
+				if (!bTree.isEmpty()) {
 					$("#canvas").fadeIn(200);
 					var treeData = bTree.toJSON();
-					update(treeData)
+					update(treeData);
 				}
 			});
 
@@ -75,7 +75,7 @@ $(function() {
 		$("#add-form").fadeOut(200, function(){
 			$("#create-form").fadeIn(200);
 		});
-		$("#delete-form").fadeOut(200,function(){
+		$("#max-min-form").fadeOut(200, function(){
 			$("#create-form").fadeIn(200);
 		});
 
@@ -133,7 +133,7 @@ $(function() {
 		//sacamos el valor por input
 		//TODo: encontrar de resaltar el name separado por ultimo o primer valor
 		//diferentes estilos
-		$("#max-min-value").val(String(nodeMin.keys[parseInt(nodeMin.keys.length)-1]));
+		$("#max-min-value").val(String(nodeMin.keys[parseInt(0)]));
 	colorPath(nodeMin);
 
 		ga('send', 'event', 'tree', 'minimum value');
@@ -161,7 +161,7 @@ $(function() {
 
 
 	// add integer event handler
-	$("#add-form").submit(function(event) {
+	$(".insert-btree").click(function(event) {
 		event.preventDefault();
 		//llamada de insercion en el arbol B-Tree
 		var value = parseInt( $("#input-add").val() );
@@ -197,13 +197,13 @@ $(function() {
 
 	});
 
-	$("#delete-form").submit(function(event) {
+	$(".borrar-btree").click(function(event) {
 		//llamada de eliminacion de key del B-Tree
 		event.preventDefault();
-		var value = parseInt( $("#input-delete").val() )
+		var value = parseInt( $("#input-add").val() )
 		bTree.delete(value); // silently insert
 
-		$("#input-delete").val("");
+		$("#input-add").val("");
 
 		//actualizacion usando Json sobre D3
 		treeData = bTree.toJSON();
