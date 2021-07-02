@@ -55,18 +55,67 @@ BTreeNode.prototype.insert = function(value){
 BTreeNode.prototype.deleteKey = function(value) {
   debugger;
   var valDel = this.keys.indexOf(value);
+  var parentDel = this.parent;
+  var childrenDel = this.parent.children;
+  var childrenTam = childrenDel.length;  
+
+  var indexDel = -1;
+  for(var i= 0 ; i < childrenDel.length ; i++) {
+    if(this.buscarKey(childrenDel[i].keys,value)) {
+      indexDel=i;
+    }
+  }
+
+
   this.keys.splice(valDel,1);
   
   if(this.keys.length < Math.ceil((this.tree.order) / 2) - 1) {
-    
+
+    debugger;
+    // padre y hermano para intercambio
+    if(indexDel === 0)  {
+      //var tamHermano =  childrenDel[indexDel+1].keys.length;
+      var keyParent = this.buscarKeyParent(parentDel.keys, value, childrenDel[indexDel+1].keys[0])
+      
+
+      childrenDel[indexDel+1].keys.push(keyParent);
+      var parentIndex = parentDel.keys.indexOf(keyParent);
+      parentDel.keys.splice(parentIndex,1);
+
+      childrenDel[indexDel+1].keys.sort(function(a,b){ // sort numbers ascending
+        if(a > b) return 1;
+        else if(a < b) return -1;
+        else return 0;
+      });
+
+      childrenDel.splice(indexDel,1);
+
+    }
+    else {
+
+    }
+
     console.log(this, "menor al order");
   }
   else {
     console.log(this, "lo retira porque no causa problema")
   }
   
+}
 
-  
+BTreeNode.prototype.buscarKey = function(arr, value) {
+  for(var i = 0 ; i < arr.length ; i++) {
+    if(arr[i] === value) 
+      return true;
+  }
+  return false;
+}
+
+BTreeNode.prototype.buscarKeyParent = function(arr, value1, value2) {
+  for(var i = 0 ; i < arr.length ; i++) {
+    if(arr[i] >= value1 && arr[i] <= value2) 
+      return arr[i];
+  }  
 }
 
 BTreeNode.prototype.handleUnderflow = function() {
