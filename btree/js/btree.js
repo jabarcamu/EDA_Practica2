@@ -76,9 +76,16 @@ BTree.prototype.delete = function(value) {
 
 }
 
+//conseguir el maximo valor del arbol
 BTree.prototype.getMax = function(){
 	var max = root.getMaximo();	
 	return max;
+}
+
+//conseguir el maximo valor del arbol
+BTree.prototype.getMin = function(){
+	var min = root.getMinimum();	
+	return min;
 }
 
 // BTree.prototype.deleteKey = function(node,value) {

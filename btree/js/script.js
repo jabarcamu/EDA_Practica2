@@ -86,26 +86,60 @@ $(function() {
 	$(".max-btree").click(function(event){
 		event.preventDefault();
 		var nodeMax = bTree.getMax();
-		var nombre = "";
-		//debemos saber que apunta g-node
-		node = nodeMax;
-		//color paths down to newly added node
-		// Make the current add node highlighted in red
-		$("g text").each(function(index) {
-			var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
-				return d.data.name === nodeMax.keys.toString();
-			});
+		//buscar el nodo de manera grafica que contenga al maximo
 
-			//resaltando el maximo nodo borde negro y relleno rojo
-			d3NodeTouched.select('circle').style('stroke','#000').style('fill','#ff0000').style('fill-opacity','.50');
+		var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+			return d.data.name === nodeMax.keys.toString();
+		});
+		
+		// resetear estilos cuando cambie de accion
+		d3.selectAll('g.node').select('circle').style('stroke','steelblue').style('fill','#fff');
+		d3.selectAll('.link').style('stroke','#ccc');
 
-			// color links and all intermediate nodes
-			colorPath(nodeMax);
+		
+		//resaltando el maximo nodo borde negro y relleno rojo
+		d3NodeTouched.select('circle').attr("text-content","14px").style('stroke','#000').style('fill','#ff0000').style('fill-opacity','.50');
+		
 
+		// resaltar ruta cuando se busco el maximo valor
+		colorPath(nodeMax);
+		
+		//sacamos el valor por input
+		//TODo: encontrar de resaltar el name separado por ultimo o primer valor
+		//diferentes estilos
+		$("#max-min-value").val(String(nodeMax.keys[parseInt(nodeMax.keys.length)-1]));
+		ga('send', 'event', 'tree', 'maximum value');
+	});
+
+	//conseguir el maximo elemento
+	$(".min-btree").click(function(event){
+		event.preventDefault();
+		var nodeMin = bTree.getMin();
+
+		//Buscar el nodo que contenga la clave de manera grafica
+		var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+			return d.data.name === nodeMin.keys.toString();
 		});
 
-		ga('send', 'event', 'tree', 'inserted value');
+		// resetear los estilos cuando se cambio de accion
+		d3.selectAll('g.node').select('circle').style('stroke','steelblue').style('fill','#fff');
+		d3.selectAll('.link').style('stroke','#ccc');
+
+
+		//resaltando el minimo nodo borde negro y relleno rojo
+		d3NodeTouched.select('circle').style('stroke','#000').style('fill','#ff0000').style('fill-opacity','.50');
+
+		// colorear enlaces y nodos de la ruta donde se busco el minimo
+		//sacamos el valor por input
+		//TODo: encontrar de resaltar el name separado por ultimo o primer valor
+		//diferentes estilos
+		$("#max-min-value").val(String(nodeMin.keys[parseInt(nodeMin.keys.length)-1]));
+	colorPath(nodeMin);
+
+		ga('send', 'event', 'tree', 'minimum value');
 	});
+
+
 
 	//para las rutas anteriores de un nodo en particular (path)
 	function colorPath(node) {

@@ -31,16 +31,26 @@ BTreeNode.prototype.traverse = function(value, strict) {
 	}
 }
 
+//COnseguir el maxmimo valor del arbol
 BTreeNode.prototype.getMaximo = function(){
 	//debugger;
-	//caso base
-	//
-	var max = 0;
 	var currentNode = this;
 	while(!currentNode.isLeaf()){
-		//caso recursivo
+		//caso iterativo
 		currentNode =  currentNode.children[currentNode.keys.length];
 		//return children[this.keys.length].getMaximo();
+	}
+	return currentNode;
+
+}
+
+//COnseguir el minimo valor del arbol
+BTreeNode.prototype.getMinimum = function(){
+	//debugger;
+	var currentNode = this;
+	while(!currentNode.isLeaf()){
+		//caso iterativo
+		currentNode =  currentNode.children[0];
 	}
 	return currentNode;
 
