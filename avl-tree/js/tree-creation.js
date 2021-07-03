@@ -8,7 +8,7 @@ var data = {
 };
 var changeRoot = false;
 
-// Find tree's height
+// Encontrar la altura
 var findHeight = function(node) {
 	if (node.data === null || !node) return 0;
   else {
@@ -18,7 +18,7 @@ var findHeight = function(node) {
   }
 };
 
-// Binary Search Tree rotation
+// Rotacion a la izquierda
 var rotateLeft = function(node, callback) {
 	var parent = node.parent,
 		leftChild = node.children[0],
@@ -78,6 +78,7 @@ var rotateLeft = function(node, callback) {
 	}, duration);
 };
 
+// Rotacion a la derecha 
 var rotateRight = function(node, callback) {
 	var parent = node.parent,
 		leftChild = node.children[0],
@@ -137,7 +138,7 @@ var rotateRight = function(node, callback) {
 	}, duration);
 };
 
-// Node highlight for better visualization
+// Resaltar el nodo seleccionado
 var highlight = function(node) {
 	var hlNode = gNodes.selectAll('circle').filter(function(d) {
 		return d.data.id === node.id;
@@ -148,6 +149,7 @@ var highlight = function(node) {
 		.style('stroke-width', '3.5px');
 };
 
+// Remover la coloracion del nodo visitado
 var removeHighlight = function(node) {
 	var hlNode = gNodes.selectAll('circle').filter(function(d) {
 		return d.data.id === node.id;
@@ -424,76 +426,77 @@ var deleteTree = function(n, callback) {
 	return true;
 };
 
-// Encontrarel valor maximo
-var findMax = async function() {	
-	console.log('nodo maximo ...', data);	
+// Encontrar el valor maximo en el arbol
+var findMax = async function() {		
 	var defer = 0.5;
 	if (!data.data) return null;
 	var nodeFindMax = data;
 	highlight(nodeFindMax);		
-	await sl(duration*defer*2);
+	await timeoutprint(duration*defer*2);
 	removeHighlight(nodeFindMax);
 
 	while(nodeFindMax.children[1] && nodeFindMax.children[1].data){
 		nodeFindMax = nodeFindMax.children[1];
 		highlight(nodeFindMax);		
-		await sl(duration*defer*2);
+		await timeoutprint(duration*defer*2);
 		removeHighlight(nodeFindMax);
 	}	
-	console.log('Encontrar el nodo maximo ...', nodeFindMax, nodeFindMax.data);
+	
 	highlight(nodeFindMax);
-	await sl(duration*defer*8);
+	await timeoutprint(duration*defer*8);
 	removeHighlight(nodeFindMax);
 
 	return nodeFindMax.data;
 }
 
-// Encontrarel valor maximo
+// Encontrar el valor minimo en el arbol
 var findMin = async function() {		
-	console.log('nodo minimo ...', data);
+	
 	var defer = 0.5;
 	if (!data.data) return null;
 	var nodeFindMin = data;
 	highlight(nodeFindMin);		
-	await sl(duration*defer*2);
+	await timeoutprint(duration*defer*2);
 	removeHighlight(nodeFindMin);
 	while(nodeFindMin.children[0] && nodeFindMin.children[0].data){
 		nodeFindMin = nodeFindMin.children[0];
 		highlight(nodeFindMin);		
-		await sl(duration*defer*2);
+		await timeoutprint(duration*defer*2);
 		removeHighlight(nodeFindMin);
 	}	
-	console.log('Encontrar el nodo minimo ...', nodeFindMin, nodeFindMin.data);
+	
 	highlight(nodeFindMin);
-	await sl(duration*defer*8);
+	await timeoutprint(duration*defer*8);
 	removeHighlight(nodeFindMin);
 
 
 	return nodeFindMin.data;
 }
 
-// Encontrarel valor maximo
+// Encontrar un elemento en el arbol
 var findValue = async function(value) {		
-	console.log('nodo value ...', data, duration);
+
+	if (!value || !Number.isInteger(value)) return; // verificar que exista en valor y es entero
+	
 	if (!data.data) return null;
 	var nodeFindNodeValue = data; // nodo raiz	
 	var defer = 0.5;
 	
 	
-	console.log('nodo value ...', nodeFindNodeValue.data);
+	
 	do {
 		
-		console.log('Imprimir camino hacia el nodo ...', nodeFindNodeValue);
+		
 		// nodo hallado entonces mantener por 3 segundos la visualizacion
 		if(nodeFindNodeValue.data === value) {
-			console.log('Imprimir valor hallado...', nodeFindNodeValue);
+			
 			highlight(nodeFindNodeValue);		
-			await sl(duration*defer*8);
+			await timeoutprint(duration*defer*8);
 			removeHighlight(nodeFindNodeValue);
 			break;
 		} else{	
 			highlight(nodeFindNodeValue);		
-			await sl(duration*defer*4);	
+			await timeoutprint(duration*defer*4);	
 			removeHighlight(nodeFindNodeValue);	
 			var nodo = nodeFindNodeValue.children.length > 0 ? nodeFindNodeValue.children : null;			
 
@@ -520,7 +523,7 @@ var findValue = async function(value) {
 	return nodeFindNodeValue;
 }
 
-
-var sl = function sleep(time) {    
+// tiempo de espera para mostrar los cambios
+var timeoutprint = function sleep(time) {    
     return new Promise(resolve => setTimeout(resolve, time));
 }
