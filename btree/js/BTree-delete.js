@@ -1,28 +1,13 @@
 class BTreeNode {
-  constructor(isLeaf) {
-    /**
-     * @type {number[]} list of values in the node
-    */
-    this.values = [];
-    /**
-     * @type {boolean} is a leaf
-    */
-    this.leaf = isLeaf;
-    /**
-     * @type {BTreeNode[]}
-    */
-    this.children = [];
-    /**
-     * Reference to the tree its belong.
-     * @type {BTree}
-     */
-    this.tree = null;
-    /**
-     * @type {BTreeNode}
-    */
+  constructor(isLeaf) {    
+    this.values = [];    
+    this.leaf = isLeaf;    
+    this.children = [];    
+    this.tree = null; 
     this.parent = null;
   }
 
+  // Transformar a formato JSON el arbol para mostrarlo en el entorno grafico
   toJSON()  {
       var json = {};
       json.name = this.values.toString();
@@ -36,19 +21,12 @@ class BTreeNode {
       return json;
   } 
 
-  /**
-   * Number of values
-   * @returns {number}
-   */
+  //Numero de valores
   get n() {
     return this.values.length;
   }
 
-  /**
-   * Add value
-   * @param {number} value 
-   * @param {number} pos 
-   */
+  //anhadir valor
   addValue(value) {
     if (!value) {
       return;
@@ -60,11 +38,7 @@ class BTreeNode {
     this.values.splice(pos, 0, value);
   }
 
-  /**
-   * Delete value and return it
-   * @param {number} pos position
-   * @return {number}
-   */
+  // borrar un valor y ponerlo en su posicion
   removeValue(pos) {
     if (pos >= this.n) {
       return null;
@@ -72,46 +46,25 @@ class BTreeNode {
     return this.values.splice(pos, 1)[0];
   }
 
-  /**
-   * Add child node at position pos
-   * @param {BTreeNode} node 
-   * @param {number} pos 
-   */
+  //agragar hijo en la posicion pos
   addChild(node, pos) {
     this.children.splice(pos, 0, node);
     node.parent = this;
   }
-  /**
-   * Delete node from position and return it
-   * @param {number} pos 
-   * @return {BTreeNode}
-   */
+  //Borrar el nodo de la posicion y borrarlo
   deleteChild(pos) {
     return this.children.splice(pos, 1)[0];
   }
 }
 
-/**
- * btree namespace.
- * @type {BTree}
-*/
+//Arbol B - BTree principal
 class BTree {
-  constructor(order) {
-    /** @type {number} */
-    this.order = order;
-    /** 
-     * Root node of the tree.
-     * @type {BTreeNode} 
-    */
-    this.root = null;
+  constructor(order) {    
+    this.order = order;    
+    this.root = null; // la raiz que sera de tipo BNodeTree
   }
 
-  /**
-  * Search a value in the Tree and return the node. O(log N)
-  * @param {number} value
-  * @param {BTreeNode} node
-  * @returns {BTreeNode}
-  */
+  //Buscar un valor en el arbol y retornar el nodo  
   searchValue(node, value) {
     if (node.values.includes(value)) {
       return node;
@@ -127,43 +80,36 @@ class BTree {
     return this.searchValue(node.children[child], value);
   }
     
-  /**
-   * Deletes the value from the Tree. O(log N)
-   * @param {number} value 
-   */
+  //Borrar el valor del arbol
   delete(value) {
     if (this.root.n === 1 && !this.root.leaf &&
       this.root.children[0].n === this.order-1 && this.root.children[1].n === this.order -1) {
-      // Check if the root can shrink the tree into its childs
+      // Verifica si la raiz puede reducir el arbol dentro de sus hijos
       this.mergeNodes(this.root.children[1], this.root.children[0]);
       this.root = this.root.children[0];
     }
-    // Start looking for the value to delete
+    // Inicio de busqueda del valor a borrar
     this.deleteFromNode(this.root, parseInt(value, 10));
   }
 
-  /**
-   * Delete a value from a node. O(log N)
-   * @param {BTreeNode} node 
-   * @param {number} value 
-   */
+  // Borrar un valor de un nodo
   deleteFromNode(node, value) {
-    // Check if value is in the actual node 
+    // Verifica si el valor esta en el nodo
     const index = node.values.indexOf(value);
     if (index >= 0) {
-      // Value present in the node
+      // Valor presente en el nodo 
       if (node.leaf && node.n > this.order - 1) {
-        // If the node is a leaf and has more than order-1 values, just delete it
+        // si el nodo es una hoja y tiene mas orden-1 valores, solo borrarlo
         node.removeValue(node.values.indexOf(value));
         return true;
       }
-      // Check if one children has enough values to transfer
+      // Verificar si algun hijo tiene los suficientes valores a transferir
       if (node.children[index].n > this.order - 1 ||
         node.children[index + 1].n > this.order - 1) {
-        // One of the immediate children has enough values to transfer
+        // Uno de los hijos inmediatos tiene los suficientes valores para transferir
         if (node.children[index].n > this.order - 1) {
-          // Replace the target value for the higher of left node.
-          // Then delete that value from the child
+          // Reemplazar el valor objetivo por el mayor del nodo izquierdo
+          // Luego Borrar el valor del hijo
           const predecessor = this.getMinMaxFromSubTree(node.children[index], 1);
           node.values[index] = predecessor;
           return this.deleteFromNode(node.children[index], predecessor);
@@ -172,26 +118,26 @@ class BTree {
         node.values[index] = successor;
         return this.deleteFromNode(node.children[index+1], successor);
       }
-      // Children has not enough values to transfer. Do a merge
+      // Hijos no tiene los sufientes valores para transferir. Realizar Merge o juntarlos
       this.mergeNodes(node.children[index + 1], node.children[index]);
       return this.deleteFromNode(node.children[index], value);
     }
-    // Value is not present in the node
+    //Valor  no esta presente en el nodo
     if (node.leaf) {
-      // Value is not in the tree
+      // valor no esta en el arbol
       return false;
     }
-    // Value is not present in the node, search in the children
+    // Valor no esta presente en el nodo, buscar en el hijo
     let nextNode = 0;
     while (nextNode < node.n && node.values[nextNode] < value) {
       nextNode++;
     }
     if (node.children[nextNode].n > this.order - 1) {
-      // Child node has enough values to continue
+      // Nodo hijo tiene los suficientes valores para continuar
       return this.deleteFromNode(node.children[nextNode], value);
     }
-    // Child node has not enough values to continue
-    // Before visiting next node transfer a value or merge it with a brother
+    // Hijo nodo no tiene los suficientes valores para continuar
+    // Antes de visitar el siguiente nodo a transferir un valor o Merge con su hermano
     if ((nextNode > 0 && node.children[nextNode - 1].n > this.order - 1) ||
       (nextNode < node.n && node.children[nextNode + 1].n > this.order - 1)) {
       // One of the immediate children has enough values to transfer
@@ -202,19 +148,15 @@ class BTree {
       }
       return this.deleteFromNode(node.children[nextNode], value);
     }
-    // No immediate brother with enough values.
-    // Merge node with immediate one brother
+    // el hermano que no es inmediato con los sufientes valores  No immediate brother with enough values.
+    // Merge al nodo con el hermano inmediato
     this.mergeNodes(
       nextNode > 0 ? node.children[nextNode - 1] : node.children[nextNode + 1],
       node.children[nextNode]);
     return this.deleteFromNode(node.children[nextNode], value);
   }
 
-  /**
-   * Transfer one value from the origin to the target. O(1)
-   * @param {BTreeNode} origin 
-   * @param {BTreeNode} target 
-  */
+  //Transferir un valor desde el origen al objetivo   
   transferValue(origin, target) {
     const indexo = origin.parent.children.indexOf(origin);
     const indext = origin.parent.children.indexOf(target);
@@ -233,11 +175,7 @@ class BTree {
     }
   }
 
-  /**
-   * Merge 2 nodes into one with the parent median value. O(1)
-   * @param {BTreeNode} origin 
-   * @param {BTreeNode} target 
-  */
+  // Juntar o Merge 2 nodos en uno con el madre de valor medio   
   mergeNodes(origin, target) {
     const indexo = origin.parent.children.indexOf(origin);
     const indext = target.parent.children.indexOf(target);
@@ -245,9 +183,9 @@ class BTree {
     for (let i = origin.n - 1; i >= 0; i--) {
       target.addValue(origin.removeValue(i));
     }
-    // Remove reference to origin node
+    //Remover la referencia al nodo origen
     target.parent.deleteChild(indexo);
-    // Transfer all the children from origin node to target
+    //  Transferir todos los hijos desde el nodo origen al objetivo
     if (!origin.leaf) {
       while (origin.children.length) {
         if (indexo > indext) {
@@ -259,12 +197,7 @@ class BTree {
     }
   }
   
-  /**
-   * Get the lower or higher value in a sub-tree. O(log N)
-   * @param {BTreeNode} node 
-   * @param { 0 | 1 } max 1 for find max, 0 for min
-   * @returns {number}
-   */
+  //Obtener el menor y mayor valor en el subarbol   
   getMinMaxFromSubTree(node, max) {
     while (!node.leaf) {
       node = node.children[max ? node.n : 0];
@@ -272,15 +205,12 @@ class BTree {
     return node.values[max ? node.n - 1 : 0];
   }
 
-  /**
-   * Insert a new value in the tree O(log N)
-   * @param {number} value
-   */
+  //Insertar un nuevo valor en el arbol
   insert(value) {
     const actual = this.root;
     if (actual.n === 2 * this.order - 1) {
-      // Create a new node to become the root
-      // Append the old root to the new one
+      // Crear un nuevo nodo para que sea la raiz
+      // Anexar la raiz anterior al nuevo
       const temp = new BTreeNode(false);
       temp.tree = this;
       this.root = temp;
@@ -292,38 +222,29 @@ class BTree {
     }
   };
 
-  /**
-   * Divide child node from parent into parent.values[pos-1] and parent.values[pos]. O(1)
-   * @param {BTreeNode} child 
-   * @param {BTreeNode} parent 
-   * @param {number} pos 
-   */
+  //Dividir el nodo hijo desde el padre dentro de parent.values[pos-1] y parent.values[pos]  
   split(child, parent, pos) {
     const newChild = new BTreeNode(child.leaf);
     newChild.tree = this.root.tree;
-    // Create a new child
-    // Pass values from the old child to the new
+    // Crear un nuevo Hijo
+    // Pasar Valores desde el hijo anterior al nuevo
     for (let k = 1; k < this.order; k++) {
       newChild.addValue(child.removeValue(this.order));
     }
-    // Trasspass child nodes from the old child to the new
+    // Traspasar nodos hijo desde el hijo anterior al nuevo
     if (!child.leaf) {
       for (let k = 1; k <= this.order; k++) {
         newChild.addChild(child.deleteChild(this.order), k - 1);
       }
     }
-    // Add new child to the parent
+    // Agregar un nuevo hijo al padre
     parent.addChild(newChild, pos);
-    // Pass value to parent
+    // Pasar el valor al padre
     parent.addValue(child.removeValue(this.order - 1));
     parent.leaf = false;
   }
 
-  /**
-   * Insert a value in a not-full node. O(1)
-   * @param {BTreeNode} node 
-   * @param {number} value
-   */
+  // Insertar un valor en un nodo no lleno   
   insertNonFull(node, value) {
     if (node.leaf) {
       node.addValue(value);
@@ -342,6 +263,7 @@ class BTree {
     this.insertNonFull(node.children[temp], value);
   }
 
+  // Iniciar con numeros aleatorios al arbol
   seed(count) {
     var list = [];
   
