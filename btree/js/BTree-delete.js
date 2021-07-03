@@ -342,16 +342,20 @@ class BTree {
     this.insertNonFull(node.children[temp], value);
   }
 
-  toJSON(tree)  {
-    var json = {};
-    json.name = tree.root.values.toString();
-    //if (!this.isRoot()) json.parent = this.parent.keys.toString();
-    if (!tree.root.leaf) {
-      json.children = [];
-      tree.root.children.forEach(function(child, index){
-        json.children.push(toJSON(child));
-      });
+  seed(count) {
+    var list = [];
+  
+    var upper = 100;
+    if (count > 50) upper = count*2;
+  
+    for(var i=1; i<upper; i++) list.push(i);
+  
+    for(var i=0; i<count; i++) {
+      list.sort(function(a,b){ return Math.floor(Math.random() * 3) - 1; })
+      var current = list.shift();
+      this.insert(current);
     }
-    return json;
-} 
+  
+  }
+ 
 }
