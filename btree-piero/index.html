@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>b-tree JS</title>
+	</head>
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet" />
+
+
+	<meta http-equiv="Cache-control" content="NO-CACHE">
+
+
+	<body id="main">  
+
+		<div id="inputs">
+			<h1>B-Tree <span class="label label-info reset-btree">Order <span id="order-display"></span></span></h1>
+
+			<form action="#" id="create-form" class="form-inline">
+				<p>
+				Crear un B-Tree de orden
+				<input type="text" class="form-control" value="3" id="new-order"/><br/>
+				and rellenar con 
+				<input type="text" class="form-control" value="15" id="new-seed"/>
+				numeros aleatorios
+				</p>
+				<button type="submit" class="btn btn-primary">Continuar &rarr;</button>
+			</form>	
+		</div>
+		<div class="container-sm">
+			<div class="col-sm-5">
+				<form action="#" id="add-form" class="form-inline">
+					<button formaction="#" id="clear-button" class="btn btn-primary reset-btree btn-sm">Reiniciar</button>
+
+					<button formaction="#" id="insert-button" class="btn btn-primary insert-btree btn-sm">Agregar</button>      
+					<button formaction="#" id="delete-button" class="btn btn-primary borrar-btree btn-sm">Borrar</button>
+
+					<div class="form-group">
+						<label for="add"></label>
+						<input type="text" class="form-control col-auto" placeholder="Ingresa un #..." id="input-add"/>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div id="canvas"></div>
+
+	</body>
+
+	<!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
+	<script src="js/jquery-3.6.0.min.js" charset="utf-8"></script>
+	<script src="js/d3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/BTree-delete.js"></script>	
+	<script type="text/javascript" src="js/script.js"></script>
+
+
+	
+
+</html>
