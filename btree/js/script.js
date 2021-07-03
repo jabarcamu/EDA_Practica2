@@ -213,7 +213,7 @@ $(function() {
 			d3.selectAll('.link').style('stroke','#ccc');
 			$("#input-add").val("");//limpiar input
 			
-			//transformando texto
+			/* //transformando texto
 			var textNode = itemFinded.keys.toString();
 			var idxItemSearched = itemFinded.keys.indexOf(value);
 			var numCharsKey = String(itemFinded.keys[idxItemSearched]).length;
@@ -226,13 +226,13 @@ $(function() {
 
 			var textBuscado = textAnt + "[" + tex+"]"+textFin;
 
-			itemFinded.keys[idxItemSearched] = textBuscado;
+			itemFinded.keys[idxItemSearched] = textBuscado; */
 
 
 			//actualizacion usando Json sobre D3
-			treeData = bTree.toJSON();
+			/* treeData = bTree.toJSON();
 			console.log(treeData);
-			update(treeData);
+			update(treeData); */
 
 
 			//resaltando el minimo nodo borde negro y relleno rojo
