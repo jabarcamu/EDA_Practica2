@@ -22,10 +22,32 @@ $(function() {
   var bTree, treeData;
 
   // automatically create btree with default settings
-  bTree = BTree(3);
-  $("#order-display").html(3);
-  bTree.seed(5);
-  var treeData = bTree.toJSON();  
+  //bTree = BTree(3);
+  //$("#order-display").html(3);
+  //bTree.seed(5);
+  var tree = null;
+  bTree = new BTree(2);
+
+  //bTree = new BTree(2);
+  
+  bTree.root = new BTreeNode(true);
+  bTree.root.tree = this.tree;
+
+  var list = [];
+
+  var count = 0;
+  upper = 100;
+  if (count > 50) upper = count*2;
+
+  for(var i=1; i<upper; i++) list.push(i);
+
+  for(var i=0; i<count; i++) {
+    list.sort(function(a,b){ return Math.floor(Math.random() * 3) - 1; })
+    current = list.shift();
+    bTree.insert(current);
+  }
+
+  var treeData = bTree.root.toJSON();  
 
   console.log(treeData);
 
@@ -76,11 +98,12 @@ $(function() {
   $("#add-form").submit(function(event) {
     event.preventDefault();
     var value = parseInt( $("#input-add").val() );
-    bTree.insert(value, true); // silently insert
+    bTree.insert(value); // silently insert
 
     $("#input-add").val("");
 
-    treeData = bTree.toJSON();
+    //treeData = bTree.toJSON();
+    treeData = bTree.root.toJSON();
     console.log(treeData);
     update(treeData);
 
@@ -114,7 +137,8 @@ $(function() {
 
     $("#input-delete").val("");
 
-    treeData = bTree.toJSON();
+    //treeData = bTree.toJSON();
+    treeData = bTree.root.toJSON();
     console.log(treeData);
     update(treeData);
 
