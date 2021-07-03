@@ -1,0 +1,175 @@
+<html>
+
+<head>
+  <title>b-tree lol</title>
+</head>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet" />
+
+<style>
+    
+    * {
+    margin: 0;
+    padding: 0;
+}
+.wrapper {
+    width: 5px;
+    height: 5px;
+    margin: 40px;
+    perspective: 10px;
+    perspective-origin: 50% 50%;
+    position: relative;
+}
+.stage {
+    transform-style: preserve-3d;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+.ball {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+    position:relative;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    box-shadow: 0px 55px 45px -38px rgba(0, 0, 0, .3);
+}
+.ball::before {
+    content: "";
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background: -webkit-radial-gradient(50% 0px, circle, #ffffff, rgba(255, 255, 255, 0) 58%);
+    z-index: 2;
+}
+.ball::hover::before {
+    transform: rotateZ(526deg);
+}
+
+.text {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    animation: rotate 5s linear infinite;
+    backface-visibility: hidden;
+}
+
+</style>
+
+<meta http-equiv="Cache-control" content="NO-CACHE">
+
+
+<body id="main">  
+
+  <div id="inputs">
+    <h1>B-Tree <span class="label label-info reset-btree">Order <span id="order-display"></span></span></h1>
+
+      
+    
+    <form action="#" id="create-form" class="form-inline">
+      <p>
+        Create B-tree of order
+        <input type="text" class="form-control" value="3" id="new-order"/><br/>
+        and seed it with
+        <input type="text" class="form-control" value="5" id="new-seed"/>
+        random numbers.
+      </p>
+      <button type="submit" class="btn btn-primary">Continue &rarr;</button>
+    </form>
+
+    <form action="#" id="add-form" class="form-inline">
+      <div class="form-group">
+        <label for="add"></label>
+        <input type="text" class="form-control" placeholder="Enter an integer..." id="input-add"/>
+      </div>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+      <a href="#" id="clear-button" class="btn btn-default reset-btree">Reiniciar</a>
+    </form>
+    
+      
+
+  </div>
+
+   
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-1 col-sm-1 col-xs-12">
+            <form action="#" id="form_1" class="form-inline">
+                <div class="wrapper" id="div_1" onclick="insertar_data(1)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>1</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(31)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>31</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(20)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>20</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(92)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>92</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(73)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>73</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(37)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>37</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(66)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>66</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(18)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>18</b></h6></div></div>
+                </div>
+                <div class="wrapper" onclick="insertar_data(87)" style="cursor: pointer;">
+                    <div class="ball"></div>
+                    <div class="stage"><div class="text"><h6><b>87</b></h6></div></div>
+                </div>
+            </form>
+        </div>    
+        <div class="col-md-11 col-sm-11 col-xs-12">
+            <div id="canvas"></div>
+        </div>
+    </div>    
+
+</body>
+
+<!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
+<script src="js/jquery-3.6.0.min.js" charset="utf-8"></script>
+<script src="js/d3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/btree.js"></script>
+<script type="text/javascript" src="js/btree-node.js"></script>
+<script type="text/javascript" src="js/script.js?1.0.0.1"></script>
+<script type="text/javascript" src="js/animacion.js"></script>
+
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+  ga('create', 'UA-XXXXX-Y', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <!-- End Google Analytics -->
+  
+</html>
