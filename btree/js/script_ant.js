@@ -1,41 +1,7 @@
-
-function insertar_data(data_value){
-    //alert("DATA:"+data_value);
-    event.preventDefault();
-    var value = parseInt( data_value );
-    bTree.insert(value, true); // silently insert
-
-    $("#input-add").val("");
-
-    treeData = bTree.toJSON();
-    console.log(treeData);
-    update(treeData);
-
-    // Make the current add node highlighted in red
-    $("g text").each(function(index) {
-        var bTreeNode = bTree.search(value);
-        var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
-            return d.name === bTreeNode.keys.toString();
-        });
-
-       // reset all links and nodes
-       d3.selectAll('g.node').select('circle').style({stroke : '#ccc', fill: '#ffffff'});
-       d3.selectAll('.link').style('stroke','#ccc');
-
-       // color links and all intermediate nodes
-       colorPath(bTreeNode);
-
-       // color bottom node
-       d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
-    });
-
-    ga('send', 'event', 'tree', 'inserted value');
-  }
-  
-
+$(function() {
   // get tree size
   var bodyRect = d3.select("body").node().getBoundingClientRect();
-  var margin = {top: 40, right: 120, bottom: 500, left: 120},//botton:20
+  var margin = {top: 40, right: 120, bottom: 20, left: 120},
   width = bodyRect.width - margin.right - margin.left,
   height = bodyRect.height - margin.top - margin.bottom;
 
@@ -51,14 +17,14 @@ function insertar_data(data_value){
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   var bTree, treeData;
 
   // automatically create btree with default settings
   bTree = BTree(3);
-  $("#order-display").html(4);
-  bTree.seed(20);
+  $("#order-display").html(3);
+  bTree.seed(5);
   var treeData = bTree.toJSON();  
 
   console.log(treeData);
@@ -90,9 +56,6 @@ function insertar_data(data_value){
     ga('send', 'event', 'tree', 'generated');
 
   });
-  
-  
-  
 
   // reset tree event handler
   $(".reset-btree").click(function(e) {
@@ -122,63 +85,79 @@ function insertar_data(data_value){
     update(treeData);
 
     // Make the current add node highlighted in red
-    $("g text").each(function(index) {
-        var bTreeNode = bTree.search(value);
-        var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
-            return d.name === bTreeNode.keys.toString();
-        });
+    // $("g text").each(function(index) {
+    //   var bTreeNode = bTree.search(value);
+    //   var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+    //     return d.name === bTreeNode.keys.toString();
+    //   });
 
-       // reset all links and nodes
-       d3.selectAll('g.node').select('circle').style({stroke : '#ccc', fill: '#ffffff'});
-       d3.selectAll('.link').style('stroke','#ccc');
+    //   // reset all links and nodes
+    //   d3.selectAll('g.node').select('circle').style({stroke : '#ccc', fill: '#ffffff'});
+    //   d3.selectAll('.link').style('stroke','#ccc');
 
-       // color links and all intermediate nodes
-       colorPath(bTreeNode);
+    //   // color links and all intermediate nodes
+    //   //colorPath(bTreeNode);
 
-       // color bottom node
-       d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
-    });
+    //   // color bottom node
+    //   d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
+    // });
 
-    ga('send', 'event', 'tree', 'inserted value');
+    //ga('send', 'event', 'tree', 'inserted value');
 
   });
-  
-  
-  
 
+  $("#delete-form").submit(function(event) {
+    event.preventDefault();
+    var value = parseInt( $("#input-delete").val() );
+    
+    bTree.delete(value); // silently insert
 
-    //var gen_run_tiempo_parcial = null;
-    //clearInterval(gen_run_tiempo_parcial);
-    function sleep(milliseconds) {
-        const date = Date.now();
-        let currentDate = null;
-        do {
-          currentDate = Date.now();
-        } while (currentDate - date < milliseconds);
-      }
+    $("#input-delete").val("");
 
-   function colorPath(node){
-       
-        //*** Color del Nodo
-        d3.selectAll('g.node').filter(function(d){
-        return d.data.name === node.keys.toString();
-        }).select('circle').style('stroke','red');
-        //*** Recorrer Arbol
-        if(node.isRoot())return;
-        else{
-            //*** Filtrar Contenido de Links
-            d3.selectAll('.link').filter(function(d){
-                return d.data ? d.data.name === 
-                        node.keys.toString() : d.data.name === 
-                        node.keys.toString();
-            }).style('stroke','red');//'steelblue');
+    // treeData = bTree.toJSON();
+    // console.log(treeData);
+    // update(treeData);
 
-            return colorPath(node.parent);
-        }
-   }
+    // Make the current add node highlighted in red
+    // $("g text").each(function(index) {
+    //   var bTreeNode = bTree.search(value);
+    //   var d3NodeTouched = d3.selectAll('g.node').filter(function(d){
+    //     return d.name === bTreeNode.keys.toString();
+    //   });
 
-  
-  
+    //   // reset all links and nodes
+    //   d3.selectAll('g.node').select('circle').style({stroke : '#ccc', fill: '#ffffff'});
+    //   d3.selectAll('.link').style('stroke','#ccc');
+
+    //   // color links and all intermediate nodes
+    //   //colorPath(bTreeNode);
+
+    //   // color bottom node
+    //   d3NodeTouched.select('circle').style({stroke : '#ff0000', fill: '#ffcccc'});
+    // });
+
+    //ga('send', 'event', 'tree', 'inserted value');
+
+  });
+
+  // color paths down to newly added node
+  // function colorPath(node) {
+  //   // color the node itself
+  //   d3.selectAll('g.node').filter(function(d){
+  //     return d.name === node.keys.toString();
+  //   }).select('circle').style('stroke','steelblue');
+
+  //   if (node.isRoot()) return;
+  //   else {
+  //     // filter for links that connect with this node
+  //     d3.selectAll('.link').filter(function(d){
+        
+  //       return d.__data__ ? d.__data__.data.name === node.keys.toString() : d.data.name === node.keys.toString();
+  //     }).style('stroke','steelblue');
+  //     return colorPath(node.parent);
+  //   }
+  // }
+
   // update d3 visualization
   function update(source) {
     
@@ -235,41 +214,33 @@ function insertar_data(data_value){
 
 
     // NODE SELECTION
-     var i = 0;
-     var node = svg.selectAll("g.node")
-       .data(nodes, function(d) { return d.id || (d.id = ++i); });    
+    // var i = 0;
+    // var node = svg.selectAll("g.node")
+    //   .data(nodes, function(d) { return d.id || (d.id = ++i); });    
 
-    // NODE POINT
+    // // NODE D3 APPENDING
+    
+
     nodeEnter.append("circle")
-      .attr("r", 5)
-      .style("fill", "white")
-      .style('opacity',0).transition()
-      .style('opacity',1).duration(250);
+      .attr("r", 10)
+      .style("fill", "#fff").style('opacity',0).transition().style('opacity',1).duration(250);
 
-    // UPDATE NODE DATA + POSITION
-    node.each(function(d,i){
-        //*** DIBUJAR CIRCULOS EN LAS POSICIONES
-        var nodo_act = d3.select('#'+this.id);
-        var tex = d.data.name;
-        var arr = tex.split(',');
-        var array = [];
-        var cx, cy;
-        //*** Recorrer String Interno
-        for(var i=0; i<arr.length; i++){
-            //*** ADD CIRCULO
-            nodo_act.append("circle")
-                .attr("cx", i*15+i*15-((arr.length-1)*15))
-                .attr("cy", 20).attr("r", 15)
-                .style("fill", "yellow");
-            //*** ADD TEXTO
-            nodo_act.append("text")
-                    .text(arr[i])
-                    .attr('transform', 'translate(' + 
-                        pos_tex_3d(arr[i],i,arr.length) 
-                        + ',' + (25) + ')');
-        }
-    });
-     
+    nodeEnter.append("text")
+      .attr("y", function(d) {
+        return d.children ? -18 : 18; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")            
+      //.style('opacity',0).transition().style('opacity',1).duration(250)
+      .text(function(d) { return d.data.name; })
+
+    // // UPDATE NODE DATA + POSITION
+    // node.each(function(d,i){
+    //   var thisNode = d3.select('#'+this.id+' text');
+    //   thisNode.text(d.name);
+    //   d3.select('#'+this.id).transition().attr('transform', 'translate(' + d.x + ',' + d.y + ')')
+
+    //   thisNode.attr("y", d.children || d._children ? -18 : 18);
+    // });
     // D3 LINKS
     
     // var diagonal = d3.line()
@@ -289,11 +260,4 @@ function insertar_data(data_value){
     //   thisLink.transition().attr("d", diagonal);
     // });
   }
-  
-  function pos_tex_3d(tex, i, tam){
-      if(tex.length==1)return(i*15+i*15-((tam-1)*15)-3);
-      if(tex.length==2)return(i*15+i*15-((tam-1)*15)-6);
-      return(i*15+i*15-((tam-1)*15)-9);
-  }
-  
-
+});
